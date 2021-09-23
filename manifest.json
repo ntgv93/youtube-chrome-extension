@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+
+  "name": "Youtube popup player",
+  "version": "0.1.0",
+  "description": "Youtube popup player",
+
+  "content_scripts": [{
+    "css": ["styles.css"],
+    "js": ["content.js"],
+    "matches": ["*://*/*"]
+  }],
+  "background": {
+    "scripts": ["app.js"]
+  },
+  "browser_action": {
+    "default_popup": "popup.html"
+  }
+}
