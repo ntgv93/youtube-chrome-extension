@@ -59,8 +59,12 @@ const getNextPage = () => {
   const div = document.querySelector('#videos');
   div.innerHTML = "";
   
-  for(let i = currentPage * 10; i < currentPage * 20; i++){
+  let lowerBound = currentPage * 10;
+  let upperBound = lowerBound + 10;
+
+  for(let i = lowerBound; i < upperBound; i++){
     const iframe = document.createElement('iframe');
+    console.log(videoIds[i]);
     
     iframe.setAttribute('src', `https://www.youtube.com/embed/${videoIds[i].id.videoId}`)
     iframe.setAttribute('width' , '600');
@@ -69,13 +73,15 @@ const getNextPage = () => {
     iframe.setAttribute('allowfullscreen', '');
     div.appendChild(iframe);
   }
-
+  
   let prevPageBtn = document.getElementById('prev-page-btn');
   prevPageBtn.style.display ='inline';
   prevPageBtn.innerHTML = 'prev.';
-
+  
   let nextPageBtn = document.getElementById('next-page-btn');
   nextPageBtn.style.display = currentPage !== 4 ? 'inline' : 'none';
+  console.log(currentPage);
+  console.log(nextPageBtn.style.display);
   nextPageBtn.innerHTML = 'next';
 }
 
@@ -86,9 +92,11 @@ const getPrevPage = () => {
 
   const div = document.querySelector('#videos');
   div.innerHTML = "";
-  
-  let upperBound = currentPage === 0 ? 10 : currentPage * 20;
-  for(let i = currentPage * 10; i < upperBound; i++){
+
+  let lowerBound = currentPage * 10;
+  let upperBound = lowerBound + 10;
+
+  for(let i = lowerBound; i < upperBound; i++){
     const iframe = document.createElement('iframe');
     
     iframe.setAttribute('src', `https://www.youtube.com/embed/${videoIds[i].id.videoId}`)
