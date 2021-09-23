@@ -1,24 +1,5 @@
-body {
+#popup {
   text-align: center;
-}
-
-#masthead,
-
-#primary {
-  -webkit-filter: invert(100%);
-  filter: invert(100%);
-  background-color: #fff;
-  padding: 20px !important;
-  min-width: 500px;
-}
-
-#masthead {
-  background: none;
-}
-
-#masthead img, #primary img {
-  -webkit-filter: invert(100%);
-  filter: invert(100%);
 }
 
 #search-btn {
@@ -31,4 +12,10 @@ body {
   width: 200px; 
   height: 24px; 
   margin: 10px;
+}
+
+.page-btn {
+  width: 50px;
+  height: 30px;
+  
 }

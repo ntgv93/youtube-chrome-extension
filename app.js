@@ -1,7 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // create an input text box to search videos 
+let videoIds = [];
+let currentPage = 0;
 
+document.addEventListener('DOMContentLoaded', () => {
   const btn = document.querySelector("#search-btn");
+  const prevPageBtn = document.querySelector('#prev-page-btn');
+  const nextPageBtn = document.querySelector('#next-page-btn');
   const input = document.querySelector("#search-input");
 
   input.addEventListener("keyup", event => {
@@ -12,10 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   btn.addEventListener('click', getVideos);
+  prevPageBtn.addEventListener('click', getPrevPage);
+  nextPageBtn.addEventListener('click', getNextPage);
 });
 
 const getVideos = () => {
-  // get list of videos
   let query = document.querySelector("#search-input").value;
 
   if(!query) 
@@ -23,25 +27,83 @@ const getVideos = () => {
 
   let apiKey = 'AIzaSyCy3urUUw1W6kDUZn2sw49iIPgaGgrQmXE';
 
-  fetch(`https://www.googleapis.com/youtube/v3/search?q=${query}&key=${apiKey}&order=rating&maxResults=10`)
+  fetch(`https://www.googleapis.com/youtube/v3/search?q=${query}&key=${apiKey}&order=rating&maxResults=50`)
     .then(data => data.json())
     .then(data => {
-      console.log(data);
+      videoIds = data.items.slice();
 
       const div = document.querySelector('#videos');
       div.innerHTML = "";
       
-      for(let video of data.items){
-
+      for(let i = 0; i < 10; i++){
         const iframe = document.createElement('iframe');
-        
-        iframe.setAttribute('src', `https://www.youtube.com/embed/${video.id.videoId}`)
+        iframe.setAttribute('src', `https://www.youtube.com/embed/${data.items[i].id.videoId}`)
         iframe.setAttribute('width' , '600');
         iframe.setAttribute('height' , '337.5');
         iframe.setAttribute('style', 'margin: 10px');
         iframe.setAttribute('allowfullscreen', '');
-
         div.appendChild(iframe);
       }
+
+      let nextPageBtn = document.getElementById('next-page-btn');
+      nextPageBtn.style.display ='inline';
+      nextPageBtn.innerHTML = 'next';
     });
+}
+  
+const getNextPage = () => {
+  window.scrollTo(0, 0);
+
+  currentPage++;
+  
+  const div = document.querySelector('#videos');
+  div.innerHTML = "";
+  
+  for(let i = currentPage * 10; i < currentPage * 20; i++){
+    const iframe = document.createElement('iframe');
+    
+    iframe.setAttribute('src', `https://www.youtube.com/embed/${videoIds[i].id.videoId}`)
+    iframe.setAttribute('width' , '600');
+    iframe.setAttribute('height' , '337.5');
+    iframe.setAttribute('style', 'margin: 10px');
+    iframe.setAttribute('allowfullscreen', '');
+    div.appendChild(iframe);
+  }
+
+  let prevPageBtn = document.getElementById('prev-page-btn');
+  prevPageBtn.style.display ='inline';
+  prevPageBtn.innerHTML = 'prev.';
+
+  let nextPageBtn = document.getElementById('next-page-btn');
+  nextPageBtn.style.display = currentPage !== 4 ? 'inline' : 'none';
+  nextPageBtn.innerHTML = 'next';
+}
+
+const getPrevPage = () => {
+  window.scrollTo(0, 0);
+
+  currentPage--;
+
+  const div = document.querySelector('#videos');
+  div.innerHTML = "";
+  
+  let upperBound = currentPage === 0 ? 10 : currentPage * 20;
+  for(let i = currentPage * 10; i < upperBound; i++){
+    const iframe = document.createElement('iframe');
+    
+    iframe.setAttribute('src', `https://www.youtube.com/embed/${videoIds[i].id.videoId}`)
+    iframe.setAttribute('width' , '600');
+    iframe.setAttribute('height' , '337.5');
+    iframe.setAttribute('style', 'margin: 10px');
+    iframe.setAttribute('allowfullscreen', '');
+    div.appendChild(iframe);
+  }
+
+  let prevPageBtn = document.getElementById('prev-page-btn');
+  prevPageBtn.style.display = currentPage !== 0 ? 'inline' : 'none';
+  prevPageBtn.innerHTML = 'prev.';
+
+  let nextPageBtn = document.getElementById('next-page-btn');
+  nextPageBtn.style.display ='inline';
+  nextPageBtn.innerHTML = 'next';
 }
